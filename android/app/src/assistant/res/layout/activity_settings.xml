@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="设置" android:textSize="26sp" android:textStyle="bold" />
+    <TextView android:id="@+id/schedule_time" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="08:00" android:textSize="22sp" android:paddingVertical="16dp" />
+    <Switch android:id="@+id/failure_screenshots" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="失败时保存截图（保留 7 天）" />
+    <Button android:id="@+id/permission_accessibility" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="开启无障碍服务" />
+    <Button android:id="@+id/permission_overlay" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="允许悬浮窗" />
+    <Button android:id="@+id/permission_exact_alarm" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="允许精确定时" />
+    <Button android:id="@+id/permission_battery" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="设置电池不限制" />
+    <Button android:id="@+id/permission_autostart" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="小米自启动设置" />
+    <Button android:id="@+id/cleanup" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="清理日志与截图" android:layout_marginTop="16dp" />
+  </LinearLayout>
+</ScrollView>

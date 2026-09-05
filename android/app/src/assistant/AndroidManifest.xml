@@ -1,0 +1,140 @@
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Start from an explicit permission allowlist for this standalone variant. -->
+    <uses-permission tools:node="removeAll" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <queries>
+        <package android:name="com.tencent.mm" />
+        <package android:name="com.taobao.idlefish" />
+        <package android:name="com.miui.securitycenter" />
+    </queries>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        tools:node="remove" />
+
+    <application>
+        <activity
+            android:name="com.local.dailyautomation.ui.DashboardActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.local.dailyautomation.ui.HistoryActivity"
+            android:exported="false" />
+        <activity android:name="com.local.dailyautomation.ui.ModuleManagementActivity" android:exported="false" />
+        <activity android:name="com.local.dailyautomation.ui.SettingsActivity" android:exported="false" />
+
+        <!-- The standalone assistant accepts no scripts or automation commands from other apps. -->
+        <activity
+            android:name="org.autojs.autojs.external.shortcut.ShortcutActivity"
+            tools:node="remove" />
+        <activity-alias
+            android:name="org.autojs.autojs.external.tasker.PluginActivity"
+            tools:node="remove" />
+        <activity
+            android:name="org.autojs.autojs.external.tasker.TaskerScriptEditActivity"
+            tools:node="remove" />
+        <receiver
+            android:name="org.autojs.autojs.external.tasker.FireSettingReceiver"
+            tools:node="remove" />
+        <activity
+            android:name="org.autojs.autojs.external.open.EditIntentActivity"
+            tools:node="remove" />
+        <activity
+            android:name="org.autojs.autojs.external.open.RunIntentActivity"
+            tools:node="remove" />
+        <activity
+            android:name="org.autojs.autojs.external.open.ImportIntentActivity"
+            tools:node="remove" />
+        <activity android:name="org.autojs.autojs.ui.splash.SplashActivity" tools:node="remove" />
+        <activity-alias android:name="org.autojs.autojs.launcher.TransparentBackgroundIconAlias" tools:node="remove" />
+        <activity-alias android:name="org.autojs.autojs.launcher.AdaptiveIconAlias" tools:node="remove" />
+        <activity android:name="org.autojs.autojs.ui.main.MainActivity" tools:node="remove" />
+        <activity android:name="org.autojs.autojs.ui.settings.PreferencesActivity" tools:node="remove" />
+        <activity android:name="org.autojs.autojs.ui.log.LogActivity" tools:node="remove" />
+        <activity android:name="org.autojs.autojs.ui.doc.DocumentationActivity" tools:node="remove" />
+        <activity android:name="org.autojs.autojs.external.tasker.TaskPrefEditActivity" tools:node="remove" />
+        <activity android:name="org.autojs.autojs.inrt.SplashActivity" tools:node="remove" />
+        <activity android:name="org.autojs.autojs.inrt.LogActivity" tools:node="remove" />
+        <activity android:name="org.autojs.autojs.inrt.SettingsActivity" tools:node="remove" />
+        <service android:name="org.autojs.autojs.external.ScriptExecutionIntentService" tools:node="remove" />
+        <service android:name="org.autojs.autojs.external.tile.LayoutBoundsTile" tools:node="remove" />
+        <service android:name="org.autojs.autojs.external.tile.LayoutHierarchyTile" tools:node="remove" />
+        <receiver android:name="org.autojs.autojs.timing.BootCompletedReceiver" tools:node="remove" />
+        <receiver android:name="org.autojs.autojs.inrt.InrtBootCompletedReceiver" tools:node="remove" />
+        <provider android:name="org.autojs.autojs.deviceid.DeviceIdProvider" tools:node="remove" />
+
+        <provider
+            android:name="rikka.shizuku.ShizukuProvider"
+            tools:node="remove" />
+        <meta-data
+            android:name="moe.shizuku.client.V3_SUPPORT"
+            tools:node="remove" />
+        <activity-alias
+            android:name="leakcanary.internal.activity.LeakLauncherActivity"
+            tools:node="remove" />
+
+        <receiver
+            android:name="com.local.dailyautomation.scheduler.DailyAlarmReceiver"
+            android:exported="false" />
+        <receiver
+            android:name="com.local.dailyautomation.scheduler.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.local.dailyautomation.scheduler.TimeChangeReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.local.dailyautomation.unlock.UnlockEventReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.USER_UNLOCKED" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.local.dailyautomation.decision.DecisionOverlayService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="user-approved daily automation decision overlay" />
+        </service>
+        <service
+            android:name="com.local.dailyautomation.overlay.RunControlsService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="user-visible controls for an active local automation run" />
+        </service>
+    </application>
+</manifest>

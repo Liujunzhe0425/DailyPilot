@@ -1,0 +1,26 @@
+[
+  {
+    "id": "weihuda-sign",
+    "displayName": "湖南大学微生活",
+    "targetPackage": "com.tencent.mm",
+    "enabled": true,
+    "sortOrder": 0,
+    "script": "modules/weihuda-sign.js"
+  },
+  {
+    "id": "withdrawal-coupon",
+    "displayName": "提现笔笔省",
+    "targetPackage": "com.tencent.mm",
+    "enabled": true,
+    "sortOrder": 1,
+    "script": "modules/withdrawal-coupon.js"
+  },
+  {
+    "id": "xianyu-polish",
+    "displayName": "闲鱼免费擦亮",
+    "targetPackage": "com.taobao.idlefish",
+    "enabled": true,
+    "sortOrder": 2,
+    "script": "modules/xianyu-polish.js"
+  }
+]

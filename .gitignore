@@ -1,0 +1,29 @@
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+
+# Android/Gradle build output and local configuration
+**/build/
+**/.gradle/
+android/local.properties
+android/sign.properties
+**/*.keystore
+**/*.jks
+**/*.p12
+**/*.pfx
+*.apk
+*.aab
+*.zip
+
+# Local collaboration material, source evidence, runtime captures and releases
+/AGENTS.md
+/raw/
+/docs/
+/memory-bank/
+/output/
+
+# Temporary scripts captured from a running device
+/android/docs/runtime-*.js

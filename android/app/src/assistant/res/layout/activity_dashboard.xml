@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="每日领航" android:textSize="26sp" android:textStyle="bold" />
+        <Switch android:id="@+id/automation_master_switch" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="启用每日自动运行" android:layout_marginTop="20dp" />
+        <TextView android:id="@+id/daily_time" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="08:00" android:textSize="20sp" android:paddingVertical="10dp" />
+        <TextView android:id="@+id/next_run" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="下次运行：未启用" />
+        <TextView android:id="@+id/permission_health" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="权限状态请在设置中检查" android:paddingVertical="12dp" />
+        <Button android:id="@+id/run_all" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="运行全部已启用模块" />
+        <Button android:id="@+id/refresh_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="只检查今日状态" />
+        <TextView android:id="@+id/today_status_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="今日实时状态" android:textSize="19sp" android:textStyle="bold" android:layout_marginTop="16dp" />
+        <TextView android:id="@+id/today_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="尚未检查" android:textSize="17sp" android:paddingVertical="10dp" />
+        <TextView android:id="@+id/module_list" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="模块载入中…" android:textSize="17sp" android:paddingVertical="16dp" />
+        <Button android:id="@+id/manage_modules" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="模块开关与排序" />
+        <Button android:id="@+id/open_history" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="运行历史" />
+        <Button android:id="@+id/open_settings" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="设置与权限" />
+    </LinearLayout>
+</ScrollView>

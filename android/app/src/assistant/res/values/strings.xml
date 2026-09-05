@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_assistant" translatable="false">每日领航</string>
+    <color name="assistant_icon_background">#0A2553</color>
+    <color name="console_debug">@color/console_view_debug</color>
+    <color name="console_verbose">@color/console_view_verbose</color>
+</resources>
