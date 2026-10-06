@@ -106,10 +106,14 @@ function classify(ctx) {
   if (claimed.length === 1) return ctx.response("COMPLETED_TODAY", "claimed:" + claimed[0].amount);
   const available = cards.filter(function (card) { return !card.claimed && (card.claim || card.relative); });
   if (available.length === 1) return ctx.response("NOT_COMPLETED", "available:" + available[0].amount);
+  let readyVisual = null;
   if (!navigation.openWechatDesktopShortcut(["微信支付提现笔笔省", "提现笔笔省"], ["提现券"], function () {
-    return vision.probeCoupon().state !== "UNKNOWN";
+    const result = vision.probeCoupon();
+    if (result.state === "UNKNOWN") return false;
+    readyVisual = result;
+    return true;
   })) return ctx.response("UNKNOWN", "coupon-page-not-found", true);
-  const visual = vision.waitForKnown(vision.probeCoupon, 1500);
+  const visual = readyVisual || vision.waitForKnown(vision.probeCoupon, 1500);
   if (visual.state !== "UNKNOWN") return ctx.response(visual.state, visual.detail);
   values = selectors.visibleTexts();
   const navigatedSecurity = safety.classifySecurityPage(values);

@@ -34,11 +34,9 @@ function clickNavigationNode(node, coordinateFallback, verticalOffset) {
 }
 
 function exactNodeForAny(labels) {
-  for (let i = 0; i < labels.length; i += 1) {
-    const node = selectors.exactNode(labels[i]);
-    if (node) return node;
-  }
-  return null;
+  let found = null;
+  labels.some(function (label) { found = selectors.exactNode(label); return !!found; });
+  return found;
 }
 
 function desktopNodeForAny(labels) {
@@ -76,8 +74,9 @@ function openDesktopShortcut(shortcutLabels, targetPackage, readyMarkers, readyP
       const deadline = Date.now() + 15000;
       let wrongPackageSince = 0;
       let targetPackageSince = 0;
+      let activePackage = "";
       while (Date.now() < deadline) {
-        const activePackage = String(currentPackage() || "");
+        activePackage = String(currentPackage() || "");
         if (activePackage === targetPackage) {
           if (targetPackageSince === 0) targetPackageSince = Date.now();
           if (acceptTargetPackageAfterMs > 0 &&
@@ -102,9 +101,8 @@ function openDesktopShortcut(shortcutLabels, targetPackage, readyMarkers, readyP
           // itself take several seconds, so try the focused probe first.
           if (typeof readyProbe === "function" && readyProbe([])) return true;
           if (readyMarkers.length > 0) {
-            const values = selectors.visibleTexts();
             if (readyMarkers.some(function (marker) {
-              return values.some(function (value) { return value.indexOf(marker) >= 0; });
+              return !!selectors.firstNodeContaining(marker);
             })) return true;
           }
         }
@@ -140,6 +138,7 @@ function openWechatDesktopShortcut(shortcutLabels, readyMarkers, readyProbe) {
 }
 
 function isXianyuPublishedPage(values) {
+  if (String(currentPackage() || "") !== "com.taobao.idlefish") return false;
   const publishedNode = selectors.firstNodeContaining("我发布的") || selectors.firstNodeContaining("今日数据");
   const tabNode = selectors.firstNodeContaining("在卖") || selectors.firstNodeContaining("草稿") ||
     selectors.firstNodeContaining("已下架");
@@ -153,7 +152,14 @@ function openXianyuPublishedItems() {
   if (isXianyuPublishedPage()) return true;
   // On this Xiaomi build, launching the package can leave the existing task
   // in the background. The launcher icon path is slower but proven reliable.
-  if (!openDesktopShortcut(["闲鱼"], "com.taobao.idlefish", [], null, 1800)) return false;
+  if (!openDesktopShortcut(["闲鱼"], "com.taobao.idlefish", [], function () {
+    if (isXianyuPublishedPage()) return true;
+    const mine = selectors.firstExactNode("我的") || selectors.firstExactNode("我");
+    if (!mine) return false;
+    const bounds = mine.bounds();
+    return bounds && bounds.top >= device.height * 0.90 && bounds.width() < device.width * 0.4 &&
+      bounds.height() < device.height * 0.1;
+  }, 1800)) return false;
   if (isXianyuPublishedPage()) return true;
   if (String(currentPackage() || "") !== "com.taobao.idlefish") return false;
   const mine = selectors.exactNode("我的") || selectors.exactNode("我");
@@ -170,9 +176,42 @@ function openXianyuPublishedItems() {
   // semantics node containing the words "我发布的"; clicking that node's
   // center opens unrelated content. If no exact node arrives, use the fixed
   // center of the first "我的交易" cell verified on the target phone.
-  const published = selectors.waitForExactNode("我发布的", 3500);
+  // A merged Flutter semantics node can prove the mine page is loaded without
+  // ever exposing an exact entry. Don't wait the full exact-node timeout when
+  // both mine-page markers have already arrived and remain stable.
+  const entryDeadline = Date.now() + 8000;
+  let published = null;
+  let mergedReadySince = 0;
+  let entryReady = false;
+  let entryBounds = null;
+  let mergedReady = false;
+  while (Date.now() < entryDeadline) {
+    if (String(currentPackage() || "") !== "com.taobao.idlefish") return false;
+    if (isXianyuPublishedPage()) return true;
+    published = selectors.firstExactNode("我发布的");
+    if (published) {
+      entryBounds = published.bounds();
+      if (entryBounds && entryBounds.width() > 0 && entryBounds.height() > 0 &&
+        entryBounds.bottom > 0 && entryBounds.top < device.height &&
+        entryBounds.right > 0 && entryBounds.left < device.width &&
+        entryBounds.width() < device.width * 0.45 && entryBounds.height() < device.height * 0.2) {
+        entryReady = true;
+        break;
+      }
+      published = null;
+    }
+    mergedReady = selectors.firstNodeContaining("我的交易") && selectors.firstNodeContaining("我发布的");
+    if (mergedReady) {
+      if (mergedReadySince === 0) mergedReadySince = Date.now();
+      if (Date.now() - mergedReadySince >= 300) { entryReady = true; break; }
+    } else {
+      mergedReadySince = 0;
+    }
+    sleep(150);
+  }
+  if (!entryReady) return false;
   if (published) {
-    if (!clickNavigationNode(published, true, -80)) return false;
+    if (!clickNavigationNode(published, true)) return false;
   } else if (!click(Math.floor(device.width * 0.115), Math.floor(device.height * 0.35))) return false;
   const deadline = Date.now() + 8000;
   while (Date.now() < deadline) {

@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $true)][string]$Serial,
-    [string]$Apk = (Join-Path $PSScriptRoot "..\app\build\outputs\apk\assistant\debug\dailypilot-v0.3.2-arm64-v8a.apk"),
+    [string]$Apk = (Join-Path $PSScriptRoot "..\app\build\outputs\apk\assistant\debug\dailypilot-v0.3.4-arm64-v8a.apk"),
     [string]$Adb = "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe"
 )
 

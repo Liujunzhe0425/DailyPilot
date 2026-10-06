@@ -25,11 +25,23 @@ function classify(ctx) {
   if (security) return ctx.response(security, "security-page");
   if (values.indexOf("已签") >= 0) return ctx.response("COMPLETED_TODAY", "text:已签");
   if (values.indexOf("签到") >= 0) return ctx.response("NOT_COMPLETED", "text:签到");
+  let readyVisual = null;
   if (!navigation.openWechatDesktopShortcut(["湖南大学微生活"], ["当前积分", "已签", "签到"], function () {
-    return vision.probeWeihuda().state !== "UNKNOWN";
+    const result = vision.probeWeihuda();
+    if (result.state === "UNKNOWN") return false;
+    readyVisual = result;
+    return true;
   })) return ctx.response("UNKNOWN", "weihuda-page-not-found", true);
-  const visual = vision.waitForKnown(vision.probeWeihuda, 1500);
-  if (visual.state === "UNKNOWN") values = selectors.visibleTexts();
+  // This result was captured during this navigation call, not persisted across
+  // phases. The click helper still takes a fresh screenshot before acting.
+  const visual = readyVisual || vision.waitForKnown(vision.probeWeihuda, 1500);
+  if (visual.state === "UNKNOWN") {
+    values = selectors.visibleTexts();
+    const navigatedSecurity = safety.classifySecurityPage(values);
+    if (navigatedSecurity) return ctx.response(navigatedSecurity, "security-page");
+    if (values.indexOf("已签") >= 0) return ctx.response("COMPLETED_TODAY", "text:已签");
+    if (values.indexOf("签到") >= 0) return ctx.response("NOT_COMPLETED", "text:签到");
+  }
   return ctx.response(visual.state, visual.detail, visual.state === "UNKNOWN");
 }
 

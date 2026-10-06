@@ -12,6 +12,8 @@ let activePackage = "com.miui.home";
 let page = "launcher";
 const coordinateClicks = [];
 let visibleTextCalls = 0;
+let mineReadyAt = 0;
+let mineEnteredAt = 0;
 
 function bounds(left, top, right, bottom) {
   return {
@@ -44,7 +46,10 @@ global.sleep = function (millis) { now += millis; };
 global.currentPackage = function () { return activePackage; };
 global.click = function (x, y) {
   coordinateClicks.push([x, y]);
-  if (activePackage === "com.taobao.idlefish" && y >= 2969) page = "mine";
+  if (activePackage === "com.taobao.idlefish" && y >= 2969) {
+    page = "mine";
+    mineEnteredAt = now;
+  }
   else if (page === "mine" && x < 400 && y >= 900 && y <= 1400) page = "published";
   return true;
 };
@@ -59,7 +64,8 @@ global.text = function () { return { findOnce: function () { return null; }, fin
 global.textContains = function (label) {
   return {
     findOnce: function () {
-      if (label === "我发布的" && (page === "mine" || page === "published")) return publishedEntry;
+      if (page === "mine" && now < mineReadyAt) return null;
+      if (["我发布的", "我的交易"].indexOf(label) >= 0 && (page === "mine" || page === "published")) return publishedEntry;
       if (["在卖", "草稿", "已下架"].indexOf(label) >= 0 && page === "published") return publishedEntry;
       return null;
     }
@@ -96,6 +102,26 @@ try {
     return point[0] === 165 && point[1] === 1120;
   }), "merged full-page semantics must use the fixed published-entry cell");
   assert.strictEqual(visibleTextCalls, 0, "successful Flutter navigation must not traverse the full accessibility tree");
+  assert(now - mineEnteredAt <= 450, "loaded merged semantics must not wait 3500 ms for an exact node");
+
+  // Slow mine-page loading must hold the published-entry gesture until the
+  // real page markers arrive and remain stable; keep the full 8-second limit.
+  now = 0;
+  page = "launcher";
+  activePackage = "com.miui.home";
+  coordinateClicks.length = 0;
+  mineReadyAt = 6000;
+  assert.strictEqual(navigation.openXianyuPublishedItems(), true);
+  assert(now >= mineReadyAt + 300, "must wait for loaded, stable mine-page markers");
+  assert(now < 11000);
+
+  now = 0;
+  page = "launcher";
+  activePackage = "com.miui.home";
+  coordinateClicks.length = 0;
+  mineReadyAt = Infinity;
+  assert.strictEqual(navigation.openXianyuPublishedItems(), false);
+  assert.strictEqual(coordinateClicks.length, 1, "no published-entry tap when the mine page never loads");
   console.log("Xianyu navigation without homepage texts: PASS");
 } finally {
   Date.now = originalNow;

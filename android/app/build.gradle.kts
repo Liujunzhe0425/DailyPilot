@@ -548,8 +548,8 @@ android {
             minSdk = 24
             targetSdk = 36
             compileSdk = 36
-            versionCode = 23
-            versionName = "0.3.2"
+            versionCode = 25
+            versionName = "0.3.4"
             buildConfigField("String", "CHANNEL", "\"assistant\"")
             buildConfigField("boolean", "isInrt", "true")
             manifestPlaceholders.putAll(

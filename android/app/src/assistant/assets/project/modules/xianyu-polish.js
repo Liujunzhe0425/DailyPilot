@@ -6,7 +6,6 @@ const navigation = require("../core/navigation.js");
 const FORBIDDEN = ["超级擦亮", "推广", "充值", "支付", "扣费", "权益", "托管无忧卖", "加500曝光"];
 
 function ensurePage() {
-  if (navigation.isXianyuPublishedPage()) return true;
   return navigation.openXianyuPublishedItems();
 }
 
@@ -29,7 +28,7 @@ function dailyCardText() {
 }
 
 function classify(ctx) {
-  if (!ensurePage() || !navigation.isXianyuPublishedPage()) {
+  if (!ensurePage()) {
     const failureValues = selectors.visibleTexts();
     const failureSecurity = safety.classifySecurityPage(failureValues);
     if (failureSecurity) return ctx.response(failureSecurity, "security-page");
@@ -54,7 +53,7 @@ function classify(ctx) {
 module.exports.probe = classify;
 module.exports.execute = function (ctx) {
   if (ctx.command.readOnly) return ctx.response("FAILED", "read-only-command", false);
-  if (!ensurePage() || !navigation.isXianyuPublishedPage()) {
+  if (!ensurePage()) {
     return ctx.response("UNKNOWN", "xianyu-published-page-not-found", true);
   }
   if (selectors.firstNodeContaining("今日已擦亮") || selectors.firstNodeContaining("擦亮成功")) {

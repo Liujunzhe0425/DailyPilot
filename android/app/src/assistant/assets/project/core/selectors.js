@@ -24,8 +24,9 @@ function visibleTexts() {
 
 function waitForAnyText(markers, timeoutMs) {
   const deadline = Date.now() + Math.min(timeoutMs || 15000, 15000);
+  let values = [];
   while (Date.now() < deadline) {
-    const values = visibleTexts();
+    values = visibleTexts();
     if (markers.some(function (marker) { return values.indexOf(marker) >= 0; })) return true;
     sleep(250);
   }
@@ -34,8 +35,9 @@ function waitForAnyText(markers, timeoutMs) {
 
 function waitForAllTexts(markers, timeoutMs) {
   const deadline = Date.now() + Math.min(timeoutMs || 15000, 15000);
+  let values = [];
   while (Date.now() < deadline) {
-    const values = visibleTexts();
+    values = visibleTexts();
     if (markers.every(function (marker) { return values.indexOf(marker) >= 0; })) return true;
     sleep(200);
   }
@@ -44,8 +46,9 @@ function waitForAllTexts(markers, timeoutMs) {
 
 function waitForAnyTextContaining(markers, timeoutMs) {
   const deadline = Date.now() + Math.min(timeoutMs || 15000, 15000);
+  let values = [];
   while (Date.now() < deadline) {
-    const values = visibleTexts();
+    values = visibleTexts();
     if (markers.some(function (marker) {
       return values.some(function (value) { return value.indexOf(marker) >= 0; });
     })) return true;
@@ -64,11 +67,10 @@ function firstExactNode(label) {
 
 function waitForAnyNodeContaining(markers, timeoutMs) {
   const deadline = Date.now() + Math.min(timeoutMs || 15000, 15000);
+  let node = null;
   while (Date.now() < deadline) {
-    for (let i = 0; i < markers.length; i += 1) {
-      const node = firstNodeContaining(markers[i]);
-      if (node) return node;
-    }
+    markers.some(function (marker) { node = firstNodeContaining(marker); return !!node; });
+    if (node) return node;
     sleep(150);
   }
   return null;
@@ -76,8 +78,9 @@ function waitForAnyNodeContaining(markers, timeoutMs) {
 
 function waitForExactNode(label, timeoutMs) {
   const deadline = Date.now() + Math.min(timeoutMs || 15000, 15000);
+  let node = null;
   while (Date.now() < deadline) {
-    const node = firstExactNode(label);
+    node = firstExactNode(label);
     if (node) return node;
     sleep(150);
   }

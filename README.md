@@ -2,7 +2,9 @@
 
 DailyPilot 是一个面向 Android 手机的本地低频自动化助手。它只通过用户可见的官方界面，按日检查并执行已经启用的任务，完成后记录状态并避免重复操作。
 
-当前正式基线：**v0.3.2（versionCode 23）**
+当前版本：**v0.3.4（versionCode 25）**
+
+v0.3.4 修复微生活选中“明日”时无法签到的问题，以及脚本引擎等待循环保留首次结果造成的超时；减少重复截图和闲鱼加载后的固定等待，保留点击前后校验和加载超时。继承 v0.3.3 的笔笔省新版适配。已在小米 14 Pro 上完成真实签到、全模块防重复及只读验收，详见 [`android/docs/TEST_MATRIX.md`](android/docs/TEST_MATRIX.md)。
 
 ## 当前模块
 
@@ -37,7 +39,7 @@ cd android
 android/app/build/outputs/apk/assistant/debug/
 ```
 
-通常可直接安装 `dailypilot-v0.3.2-arm64-v8a.apk`。使用 `adb install -r` 覆盖安装可以保留本机运行记录和大部分权限；真机部署脚本见 [`android/tools/deploy-to-phone.ps1`](android/tools/deploy-to-phone.ps1)。正式 Release 签名需要在本机自行准备未纳入 Git 的 `android/sign.properties` 和签名密钥，字段说明见 [`android/docs/RELEASE.md`](android/docs/RELEASE.md)。
+通常可直接安装 `dailypilot-v0.3.4-arm64-v8a.apk`。使用 `adb install -r` 覆盖安装可以保留本机运行记录和大部分权限；真机部署脚本见 [`android/tools/deploy-to-phone.ps1`](android/tools/deploy-to-phone.ps1)。正式 Release 签名需要在本机自行准备未纳入 Git 的 `android/sign.properties` 和签名密钥，字段说明见 [`android/docs/RELEASE.md`](android/docs/RELEASE.md)。
 
 ## 运行原则与安全边界
 
